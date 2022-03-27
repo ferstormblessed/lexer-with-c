@@ -14,7 +14,7 @@
 
 %%
 
-[1-9][0-9]+[ \n]                                    {integers.push_back(yytext);}       //integers
+[^ ][1-9][0-9]+[ \n]                                   {integers.push_back(yytext);}       //integers
 [+-]?[1-9][0-9]*(\.)[ \n]                           {real_numbers.push_back(yytext);}   //real numbers
 [+-]?[1-9][0-9]*(\.)[0-9]*[ \n]                     {real_numbers.push_back(yytext);}   //real numbers
 [+-]?[1-9][0-9]*(\.)[0-9]*[Ee][+-]?[0-9]+[ \n]      {real_numbers.push_back(yytext);}   //real numbers
@@ -23,7 +23,7 @@
 [+-]?[0-9]?(\.)[0-9]*[Ee][+-]?[0-9]+[ \n]           {real_numbers.push_back(yytext);}   //real numbers  
 [=+*/^-][ \n]                                       {operators.push_back(yytext);}      //operators
 (\/){2}.*[\n]                                       {comments.push_back(yytext);}       //comments
-[a-zA-Z][0-9a-zA-Z_]*[ \n]                          {variables.push_back(yytext);}      //variables
+[^ ][a-zA-Z][0-9a-zA-Z_]*[ \n]                          {variables.push_back(yytext);}      //variables
 .                                  ;
 
 %%
