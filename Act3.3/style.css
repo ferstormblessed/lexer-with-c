@@ -1,0 +1,23 @@
+.body{
+    color: darkslateblue;
+}
+
+.integer{
+    color: rgb(51, 153, 114);
+}
+
+.real_number{
+    color: rgb(204, 64, 64);
+}
+
+.opeator{
+    color: aqua;
+}
+
+.comment{
+    color: darkgreen;
+}
+
+.identifier{
+    color: black;
+}

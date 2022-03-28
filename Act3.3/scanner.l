@@ -1,66 +1,62 @@
 %{
     #include <iostream>
+    #include <stdio.h>
     #include <string>
     #include <fstream>
     #include <vector>
+    #include <unordered_map>
+    #include <algorithm>
 
-    std::vector<std::string> integers;
-    std::vector<std::string> real_numbers;
-    std::vector<std::string> comments;
-    std::vector<std::string> operators;
-    std::vector<std::string> variables;
-    
+    using namespace std;
+
+    unordered_map<string, string> token_type;
 %}
 
 %%
 
-[^ ][1-9][0-9]+[ \n]                                   {integers.push_back(yytext);}       //integers
-[+-]?[1-9][0-9]*(\.)[ \n]                           {real_numbers.push_back(yytext);}   //real numbers
-[+-]?[1-9][0-9]*(\.)[0-9]*[ \n]                     {real_numbers.push_back(yytext);}   //real numbers
-[+-]?[1-9][0-9]*(\.)[0-9]*[Ee][+-]?[0-9]+[ \n]      {real_numbers.push_back(yytext);}   //real numbers
-[+-]?[0-9](\.)[ \n]                                 {real_numbers.push_back(yytext);}   //real numbers
-[+-]?[0-9]?(\.)[0-9]*[ \n]                          {real_numbers.push_back(yytext);}   //real numbers 
-[+-]?[0-9]?(\.)[0-9]*[Ee][+-]?[0-9]+[ \n]           {real_numbers.push_back(yytext);}   //real numbers  
-[=+*/^-][ \n]                                       {operators.push_back(yytext);}      //operators
-(\/){2}.*[\n]                                       {comments.push_back(yytext);}       //comments
-[^ ][a-zA-Z][0-9a-zA-Z_]*[ \n]                          {variables.push_back(yytext);}      //variables
+[^ ][1-9][0-9]+[ \n]                            {token_type.insert(make_pair<string, string>(yytext, "integer"));}       //integers
+[+-]?[1-9][0-9]*(\.)[ \n]                       {token_type.insert(make_pair<string, string>(yytext, "real_number"));}   //real numbers
+[+-]?[1-9][0-9]*(\.)[0-9]*[ \n]                 {token_type.insert(make_pair<string, string>(yytext, "real_number"));}   //real numbers
+[+-]?[1-9][0-9]*(\.)[0-9]*[Ee][+-]?[0-9]+[ \n]  {token_type.insert(make_pair<string, string>(yytext, "real_number"));}   //real numbers
+[+-]?[0-9](\.)[ \n]                             {token_type.insert(make_pair<string, string>(yytext, "real_number"));}   //real numbers
+[+-]?[0-9]?(\.)[0-9]*[ \n]                      {token_type.insert(make_pair<string, string>(yytext, "real_number"));}   //real numbers 
+[+-]?[0-9]?(\.)[0-9]*[Ee][+-]?[0-9]+[ \n]       {token_type.insert(make_pair<string, string>(yytext, "real_number"));}   //real numbers
+[=+*/^-][ \n]                                   {token_type.insert(make_pair<string, string>(yytext, "operator"));}      //operators
+(\/){2}.*[\n]                                   {token_type.insert(make_pair<string, string>(yytext, "comment"));}       //comments
+[^ ][a-zA-Z][0-9a-zA-Z_]*[ \n]                  {token_type.insert(make_pair<string, string>(yytext, "identifier"));}      //variables
 .                                  ;
 
 %%
 
+int yywrap(){
+    return 1;
+}
+
 int main(int argc, char* argv[]){
-
-    yyin = fopen(argv[1], "r"); //file to read input
-
+    yyin = fopen(argv[1], "r"); //file to read
     yylex();
 
-    for(int i = 0; i < integers.size(); i++){
-        std::cout << "integer: " << integers[i] << std::endl;
+    //Writting html
+
+    string file_name = "output.html"; //name of html file
+    ofstream file;
+    file.open(file_name);
+
+    file << "<!DOCTYPE HTML>\n";
+    file << "<html>\n";
+    file << "\t<head>\n";
+    file << "\t\t<link rel='stylesheet' href='style.css'>\n";
+    file << "\t</head>\n";
+    file << "\t<body>\n";
+
+    unordered_map<string, string>::iterator it = token_type.begin();
+
+    while(it != token_type.end()){
+        file << "\t\t<p class=\"" << it->second << "\"> " << it->first << " </p>\n";
+        it++;
     }
 
-    std::cout << std::endl;
-
-    for(int i = 0; i < real_numbers.size(); i++){
-        std::cout << "real number: " << real_numbers[i] << std::endl;
-    }
-
-    std::cout << std::endl;
-
-    for(int i = 0; i < variables.size(); i++){
-        std::cout << "variable: " << variables[i] << std::endl;
-    }
-
-    std::cout << std::endl;
-
-    for(int i = 0; i < operators.size(); i++){
-        std::cout << "operator: " << operators[i] << std::endl;
-    }
-
-    std::cout << std::endl;
-
-    for(int i = 0; i < comments.size(); i++){
-        std::cout << "comment: " << comments[i] << std::endl;
-    }
+    file.close();
 
     return 0;
 }

@@ -490,16 +490,16 @@ char *yytext;
 #line 1 "scanner.l"
 #line 2 "scanner.l"
     #include <iostream>
+    #include <stdio.h>
     #include <string>
     #include <fstream>
     #include <vector>
+    #include <unordered_map>
+    #include <algorithm>
 
-    std::vector<std::string> integers;
-    std::vector<std::string> real_numbers;
-    std::vector<std::string> comments;
-    std::vector<std::string> operators;
-    std::vector<std::string> variables;
-    
+    using namespace std;
+
+    unordered_map<string, string> token_type;
 #line 503 "lex.yy.c"
 #line 504 "lex.yy.c"
 
@@ -782,61 +782,61 @@ case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
 #line 17 "scanner.l"
-{integers.push_back(yytext);}       //integers
+{token_type.insert(make_pair<string, string>(yytext, "integer"));}       //integers
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
 #line 18 "scanner.l"
-{real_numbers.push_back(yytext);}   //real numbers
+{token_type.insert(make_pair<string, string>(yytext, "real_number"));}   //real numbers
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
 #line 19 "scanner.l"
-{real_numbers.push_back(yytext);}   //real numbers
+{token_type.insert(make_pair<string, string>(yytext, "real_number"));}   //real numbers
 	YY_BREAK
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
 #line 20 "scanner.l"
-{real_numbers.push_back(yytext);}   //real numbers
+{token_type.insert(make_pair<string, string>(yytext, "real_number"));}   //real numbers
 	YY_BREAK
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
 #line 21 "scanner.l"
-{real_numbers.push_back(yytext);}   //real numbers
+{token_type.insert(make_pair<string, string>(yytext, "real_number"));}   //real numbers
 	YY_BREAK
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
 #line 22 "scanner.l"
-{real_numbers.push_back(yytext);}   //real numbers 
+{token_type.insert(make_pair<string, string>(yytext, "real_number"));}   //real numbers 
 	YY_BREAK
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
 #line 23 "scanner.l"
-{real_numbers.push_back(yytext);}   //real numbers  
+{token_type.insert(make_pair<string, string>(yytext, "real_number"));}   //real numbers
 	YY_BREAK
 case 8:
 /* rule 8 can match eol */
 YY_RULE_SETUP
 #line 24 "scanner.l"
-{operators.push_back(yytext);}      //operators
+{token_type.insert(make_pair<string, string>(yytext, "operator"));}      //operators
 	YY_BREAK
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
 #line 25 "scanner.l"
-{comments.push_back(yytext);}       //comments
+{token_type.insert(make_pair<string, string>(yytext, "comment"));}       //comments
 	YY_BREAK
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
 #line 26 "scanner.l"
-{variables.push_back(yytext);}      //variables
+{token_type.insert(make_pair<string, string>(yytext, "identifier"));}      //variables
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
@@ -1856,39 +1856,42 @@ void yyfree (void * ptr )
 #line 29 "scanner.l"
 
 
+int yywrap(){
+    return 1;
+}
+
 int main(int argc, char* argv[]){
-
-    yyin = fopen(argv[1], "r"); //file to read input
-
+    yyin = fopen(argv[1], "r"); //file to read
     yylex();
 
-    for(int i = 0; i < integers.size(); i++){
-        std::cout << "integer: " << integers[i] << std::endl;
+    //Writting html
+
+    string file_name = "output.html"; //name of html file
+    ofstream file;
+    file.open(file_name);
+
+    file << "<!DOCTYPE HTML>\n";
+    file << "<html>\n";
+    file << "\t<head>\n";
+    file << "\t\t<link rel='stylesheet' href='style.css'>\n";
+    file << "\t</head>\n";
+    file << "\t<body>\n";
+
+    unordered_map<string, string>::iterator it = token_type.begin();
+
+    while(it != token_type.end()){
+        file << "\t\t<p class=\"" << it->second << "\"> " << it->first << " </p>\n";
+        it++;
     }
 
-    std::cout << std::endl;
-
-    for(int i = 0; i < real_numbers.size(); i++){
-        std::cout << "real number: " << real_numbers[i] << std::endl;
-    }
-
-    std::cout << std::endl;
-
-    for(int i = 0; i < variables.size(); i++){
-        std::cout << "variable: " << variables[i] << std::endl;
-    }
-
-    std::cout << std::endl;
-
-    for(int i = 0; i < operators.size(); i++){
-        std::cout << "operator: " << operators[i] << std::endl;
-    }
-
-    std::cout << std::endl;
-
-    for(int i = 0; i < comments.size(); i++){
-        std::cout << "comment: " << comments[i] << std::endl;
-    }
+    // for(int i = 0; i < operators.size(); i++){
+    //     string s = operators[i];
+    //     cout << s << endl;
+    //     file << "\t\t<p class=\"integer\"> " << operators[i] << "</p>\n";
+    // }
+    file << "\t</body>\n";
+    file.close();
 
     return 0;
 }
+
