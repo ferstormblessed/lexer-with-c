@@ -1,0 +1,14 @@
+En la terminal, en el directorio Act3.3
+$ ./a.out test.txt
+
+*test.txt es el archivo a leer
+*archivo de salida se llama output.html
+
+Para cambiar las expresiones se debe hacer lo siguiente:
+En la terminal, en el directorio Act3.3
+$ flex scanner.l
+$ g++ lex.yy.c -ll
+$ ./a.out test.txt
+
+*test.txt es el archivo a leer
+*archivo de salida se llama output.html

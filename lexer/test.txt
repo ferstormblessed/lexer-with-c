@@ -1,0 +1,29 @@
+123 124
+abc - = 
+//this is a comment
+_r_1 = 2.3 * ( -0.7 / .001e-4 ) // this is the second comment
+
+#include <iostream>
+import math
+
+int main(int argc, char* argv[]){
+    yyin = fopen(argv[1], "r"); //file to read
+    yylex();
+
+    //Writting html
+
+    string file_name = "output.html"; //name of html file
+    ofstream file;
+    file.open(file_name);
+
+    unordered_map<string, string>::iterator it = token_type.begin();
+
+    while(it != token_type.end()){
+        file << " ";
+        it++;
+    }
+
+    file.close();
+
+    return 0;
+}

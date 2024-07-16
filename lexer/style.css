@@ -1,0 +1,68 @@
+body{
+    background-color: black;
+    color: white;
+}
+
+.string{
+    color: orange;
+}
+
+.integer{
+    color: rgb(184, 49, 161);
+    font-weight: 300;
+}
+
+.real_number{
+    color: rgb(228, 123, 123);
+    font-weight: 300;
+}
+
+.operator{
+    color: rgb(255, 0, 0);
+    font-weight: 300;
+}
+
+.comment{
+    color: rgb(173, 255, 47);
+    font-weight: 300;
+}
+
+.identifier{
+    color: rgb(138, 138, 228);
+    font-weight: 300;
+}
+
+.parenthesis{
+    color: rgb(190, 49, 72);
+    font-weight: 300;
+}
+
+.curly_brace{
+    color: rgb(0, 255, 64);
+    font-weight: 300;
+}
+
+.bracket{
+    color: rgb(118, 2, 201);
+    font-weight: 300;
+}
+
+.semicolon{
+    color: rgb(81, 193, 199);
+    font-weight: 300;
+}
+
+.colon{
+    color: rgb(139, 20, 80);
+    font-weight: 300;
+}
+
+.coma{
+    color: rgb(122, 223, 122);
+    font-weight: 300;
+}
+
+.library{
+    color: rgb(255, 0, 255);
+    font-weight: 300;
+}
